@@ -3,7 +3,9 @@ new Vue({
   data: {
     backgroundColor: 'rgb(24, 59, 132)',
     borderColor: 'rgb(99, 59, 132)',
-    weightData: null
+    weightData: null,
+    bmiChart: null,
+    weightChart: null
   },
   methods: {
     newChart(id, options) {
@@ -15,7 +17,7 @@ new Vue({
         data: {
           labels: options.labels, // array
           datasets: [{
-            label: 'Weight',
+            label: options.label,
             backgroundColor: options.backgroundColor,
             borderColor: options.borderColor,
             data: options.data // array
@@ -43,6 +45,8 @@ new Vue({
       })
     },
     getWeightData() {
+
+      // testing data, todo implement csv upload 
       let weightData =`
       3.11 .2019, 102.3
       10.11 .2019, 102.2
@@ -87,11 +91,22 @@ new Vue({
 
     let data = this.getWeightData();
 
-    this.chart = this.newChart('chart', {
+    // weight chart
+    this.weightChart = this.newChart('chart-weight', {
+      label: "Weight",
       backgroundColor: this.backgroundColor,
       borderColor: this.borderColor,
       labels: data.map(x => x.date),
       data: data.map(x => x.weight)
+    });
+
+    // bmi chart
+    this.bmiChart = this.newChart('chart-bmi', {
+      label: 'BMI',
+      backgroundColor: this.backgroundColor,
+      borderColor: this.borderColor,
+      labels: data.map(x => x.date),
+      data: data.map(x => x.weight / Math.pow(1.88, 2))
     });
   }
 })
